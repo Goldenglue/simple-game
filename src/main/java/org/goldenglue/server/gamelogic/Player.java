@@ -1,7 +1,8 @@
-package org.goldenglue.server;
+package org.goldenglue.server.gamelogic;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.goldenglue.server.Socket;
 
 @JsonClassDescription
 public class Player {

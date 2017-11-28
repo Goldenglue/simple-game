@@ -17,4 +17,8 @@ public class GameState {
     public void setPlayers(Set<Player> players) {
         this.players = players;
     }
+
+    public void update(GameState gameState) {
+
+    }
 }

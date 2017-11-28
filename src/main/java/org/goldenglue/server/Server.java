@@ -1,8 +1,13 @@
 package org.goldenglue.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.goldenglue.server.gamelogic.GameState;
+import org.goldenglue.server.processing.SocketAccepter;
+import org.goldenglue.server.processing.SocketProcessor;
 
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,7 +30,7 @@ public class Server {
     }
 
     public void start() {
-        Queue<Socket> socketChannels = new ArrayBlockingQueue<>(1024);
+        Set<Socket> socketChannels = new HashSet<>();
         this.objectMapper = new ObjectMapper();
         this.gameState = new GameState();
         this.socketAccepter = new SocketAccepter(port, socketChannels, objectMapper, gameState);
@@ -33,7 +38,7 @@ public class Server {
         this.executorService = Executors.newFixedThreadPool(2);
         executorService.submit(socketAccepter);
 
-        this.socketProcessor = new SocketProcessor();
+        this.socketProcessor = new SocketProcessor(socketChannels, gameState, objectMapper);
         executorService.submit(socketProcessor);
 
         System.out.println("Server started on port " + port);

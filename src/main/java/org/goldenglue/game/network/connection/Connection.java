@@ -1,4 +1,4 @@
-package org.goldenglue.game.network;
+package org.goldenglue.game.network.connection;
 
 import org.goldenglue.game.Animation;
 

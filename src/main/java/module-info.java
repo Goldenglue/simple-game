@@ -8,4 +8,5 @@ module goldenglue.main {
     requires log4j.api;
     exports org.goldenglue.game;
     exports org.goldenglue.server;
+    exports org.goldenglue.server.gamelogic;
 }

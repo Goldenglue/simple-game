@@ -1,4 +1,4 @@
-package org.goldenglue.game.network;
+package org.goldenglue.game.network.server;
 
 import org.goldenglue.server.ServerCommand;
 

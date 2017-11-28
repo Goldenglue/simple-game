@@ -1,7 +1,12 @@
-package org.goldenglue.game.network;
+package org.goldenglue.game.network.connection;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goldenglue.game.Animation;
+import org.goldenglue.game.GameState;
+import org.goldenglue.game.Player;
+import org.goldenglue.game.network.server.ServerCommand;
+import org.goldenglue.game.network.server.ServerMessageTranslator;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -49,7 +54,9 @@ public class ConnectionHandler {
                 bytes[start++] = buffer.get();
             }
             //System.out.println(new String(bytes, Charset.forName("UTF-8")));
-            ServerCommand serverCommand = serverMessageTranslator.translate(bytes);
+            ServerCommand serverCommand = serverMessageTranslator.translateAndGetCommand(bytes);
+            processCommand(serverCommand, bytes);
+
 
             buffer.clear();
         } catch (IOException e) {
@@ -67,4 +74,47 @@ public class ConnectionHandler {
             executorService.shutdown();
         }
     }
+
+    private void processCommand(ServerCommand command, byte[] bytes) {
+        switch (command) {
+            case PLAYER_CONNECTED:
+                onConnection(bytes);
+                break;
+            case GAME_STATE_SENT:
+                onGameState(bytes);
+                break;
+        }
+    }
+
+    private void onConnection(byte[] bytes) {
+        System.out.println("on connection");
+        try {
+            JsonNode jsonNode = objectMapper.readTree(bytes);
+            if (jsonNode.hasNonNull("object")) {
+                JsonNode objectNode = jsonNode.get("object");
+                Player player = objectMapper.treeToValue(objectNode, Player.class);
+                animation.setPlayer(player);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onGameState(byte[] bytes) {
+        System.out.println("on game state");
+        try {
+            JsonNode jsonNode = objectMapper.readTree(bytes);
+            if (jsonNode.hasNonNull("object")) {
+                JsonNode objectNode = jsonNode.get("object");
+                GameState gameState = objectMapper.treeToValue(objectNode, GameState.class);
+                animation.updateGameState(gameState);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 public class Animation extends AnimationTimer {
     private GraphicsContext gc;
     private GameState gameState = new GameState();
+    private Player player;
 
 
     public Animation(GraphicsContext gc) {
@@ -27,22 +28,32 @@ public class Animation extends AnimationTimer {
         });
     }
 
-    public void setNewGameState(GameState gameState) {
+    public void updateGameState(GameState gameState) {
         gameState.getPlayers().forEach(player -> {
             if (player.getNumber() == 0) {
                 player.setColor(Color.YELLOW);
-            } else if (player.getNumber() == 1) {
+            } else {
                 player.setColor(Color.RED);
             }
         });
         this.gameState = gameState;
     }
 
+    public void setPlayer(Player player) {
+        if (player.getNumber() == 0) {
+            player.setColor(Color.YELLOW);
+        } else {
+            player.setColor(Color.RED);
+        }
+        gameState.addPlayerIntoGame(player);
+        this.player = player;
+    }
+
     public void moveUserPixelOnX(double distance) {
-        //player.setX(player.getX() + distance);
+        player.setX(player.getX() + distance);
     }
 
     public void moveUserPixelOnY(double distance) {
-        //player.setY(player.getY() + distance);
+        player.setY(player.getY() + distance);
     }
 }

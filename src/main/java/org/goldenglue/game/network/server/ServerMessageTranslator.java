@@ -1,7 +1,8 @@
-package org.goldenglue.game.network;
+package org.goldenglue.game.network.server;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.goldenglue.game.network.server.ServerCommand;
 
 import java.io.IOException;
 
@@ -12,7 +13,7 @@ public class ServerMessageTranslator {
         this.mapper = mapper;
     }
 
-    public ServerCommand translate(byte[] bytes) {
+    public ServerCommand translateAndGetCommand(byte[] bytes) {
         try {
             JsonNode jsonNode = mapper.readTree(bytes);
             System.out.println(jsonNode.asText());
@@ -32,5 +33,16 @@ public class ServerMessageTranslator {
         return ServerCommand.UNKNOWN_COMMAND;
     }
 
+    public String translateAndGetMessage(byte[] bytes) {
+        try {
+            JsonNode jsonNode = mapper.readTree(bytes);
+            if (jsonNode.hasNonNull("object")) {
+                return jsonNode.get("object").asText();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

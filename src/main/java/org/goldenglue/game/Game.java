@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import org.goldenglue.game.network.Connection;
+import org.goldenglue.game.network.connection.Connection;
 
 public class Game extends Application {
 
