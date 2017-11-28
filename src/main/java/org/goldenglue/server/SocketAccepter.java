@@ -57,10 +57,10 @@ public class SocketAccepter implements Runnable {
         } else {
             player = new Player(socket,200,200,10,10, socket.getSocketId());
         }
+        ServerMessage<Player> playerJoinedMessage = new ServerMessage<>(ServerCommand.PLAYER_CONNECTED, player);
 
         gameState.addPlayerIntoGame(player);
-        System.out.println(objectMapper.writeValueAsString(gameState));
-        byte[] bytes = objectMapper.writeValueAsBytes(gameState);
+        byte[] bytes = objectMapper.writeValueAsBytes(playerJoinedMessage);
         System.out.println(bytes.length);
         buffer.put(bytes);
         buffer.flip();
