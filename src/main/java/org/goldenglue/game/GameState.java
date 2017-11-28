@@ -1,4 +1,4 @@
-package org.goldenglue.server;
+package org.goldenglue.game;
 
 import java.util.HashSet;
 import java.util.Set;

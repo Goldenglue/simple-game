@@ -2,7 +2,6 @@ package org.goldenglue.server;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javafx.scene.paint.Color;
 
 @JsonClassDescription
 public class Player {
@@ -12,11 +11,14 @@ public class Player {
     private double y;
     private double w;
     private double h;
-    private int number;
-    private Color color;
+    private long number;
 
-    public Player(Socket playersSocket, int number) {
+    public Player(Socket playersSocket, double x, double y, double w, double h, long number) {
         this.playersSocket = playersSocket;
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
         this.number = number;
     }
 
@@ -60,19 +62,12 @@ public class Player {
         this.h = h;
     }
 
-    public int getNumber() {
+    public long getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(long number) {
         this.number = number;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
 }

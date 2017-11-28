@@ -12,7 +12,6 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Connection.connect();
         Group root = new Group();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -22,8 +21,10 @@ public class Game extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Player player = new Player(100, 100, 10, 10, 2);
-        Animation animation = new Animation(gc, player);
+        Animation animation = new Animation(gc);
+        Connection connection = new Connection(animation);
+        connection.connect();
+
 
         scene.setOnKeyPressed(new MovementEventHandler(animation));
 

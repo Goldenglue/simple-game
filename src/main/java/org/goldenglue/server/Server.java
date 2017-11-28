@@ -1,6 +1,7 @@
 package org.goldenglue.server;
 
-import java.nio.channels.SocketChannel;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -11,6 +12,8 @@ public class Server {
     private SocketAccepter socketAccepter;
     private SocketProcessor socketProcessor;
     private ExecutorService executorService;
+    private ObjectMapper objectMapper;
+    private GameState gameState;
 
     public Server(int port) {
         this.port = port;
@@ -23,7 +26,9 @@ public class Server {
 
     public void start() {
         Queue<Socket> socketChannels = new ArrayBlockingQueue<>(1024);
-        this.socketAccepter = new SocketAccepter(port, socketChannels);
+        this.objectMapper = new ObjectMapper();
+        this.gameState = new GameState();
+        this.socketAccepter = new SocketAccepter(port, socketChannels, objectMapper, gameState);
 
         this.executorService = Executors.newFixedThreadPool(2);
         executorService.submit(socketAccepter);

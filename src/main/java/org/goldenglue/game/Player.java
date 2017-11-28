@@ -1,13 +1,17 @@
 package org.goldenglue.game;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.scene.paint.Color;
 
+@JsonClassDescription
 public class Player {
     private double x;
     private double y;
     private double w;
     private double h;
-    private int number;
+    private long number;
+    @JsonIgnore
     private Color color;
 
     public Player(double x, double y, double w, double h, int number) {
@@ -16,11 +20,10 @@ public class Player {
         this.w = w;
         this.h = h;
         this.number = number;
-        if (number == 1) {
-            this.color = Color.BLACK;
-        } else if (number == 2) {
-            this.color = Color.RED;
-        }
+    }
+
+    public Player() {
+
     }
 
     public double getX() {
@@ -55,11 +58,11 @@ public class Player {
         this.h = h;
     }
 
-    public int getNumber() {
+    public long getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(long number) {
         this.number = number;
     }
 

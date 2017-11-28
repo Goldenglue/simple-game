@@ -1,5 +1,10 @@
 package org.goldenglue.game.network;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.goldenglue.game.Animation;
+import org.goldenglue.game.GameState;
+import org.goldenglue.game.Player;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -9,8 +14,10 @@ import java.util.concurrent.Executors;
 
 public class ConnectionHandler {
     private SocketChannel socketChannel;
-    private ByteBuffer buffer = ByteBuffer.allocate(64);
+    private ByteBuffer buffer = ByteBuffer.allocate(256);
     private ExecutorService executorService;
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private Animation animation;
     private Runnable connectionLoop = () -> {
         while (true) {
             read();
@@ -22,6 +29,10 @@ public class ConnectionHandler {
             }
         }
     };
+
+    public ConnectionHandler(Animation animation) {
+        this.animation = animation;
+    }
 
     public void handle(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
@@ -38,7 +49,10 @@ public class ConnectionHandler {
             while (buffer.hasRemaining()) {
                 bytes[start++] = buffer.get();
             }
-            System.out.println(new String(bytes, Charset.forName("UTF-8")));
+            //System.out.println(new String(bytes, Charset.forName("UTF-8")));
+            GameState gameState = objectMapper.readValue(bytes, GameState.class);
+
+            animation.setNewGameState(gameState);
             buffer.clear();
         } catch (IOException e) {
             e.printStackTrace();
